@@ -13,12 +13,13 @@ Usage:
 	php RunTests.php [options] [file or directory]
 
 Options:
-	-p <php>    Specify PHP-CGI executable to run.
-	-c <path>   Look for php.ini in directory <path> or use <path> as php.ini.
-	-log <path> Write log to file <path>.
-	-d key=val  Define INI entry 'key' with value 'val'.
-	-l <path>   Specify path to shared library files (LD_LIBRARY_PATH)
-	-s          Show information about skipped tests
+	-p <php>     Specify PHP-CGI executable to run.
+	-c <path>    Look for php.ini in directory <path> or use <path> as php.ini.
+	-log <path>  Write log to file <path>.
+	-dlog <path> Write diff log to file <path>.
+	-d key=val   Define INI entry 'key' with value 'val'.
+	-l <path>    Specify path to shared library files (LD_LIBRARY_PATH)
+	-s           Show information about skipped tests
 
 <?php
 }

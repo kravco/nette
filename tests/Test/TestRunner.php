@@ -29,6 +29,9 @@ class TestRunner
 	/** @var resource */
 	private $logFile;
 
+	/** @var resource */
+	private $diffLogFile;
+
 	/** @var string  php-cgi binary */
 	public $phpBinary;
 
@@ -105,6 +108,7 @@ class TestRunner
 			foreach ($failed as $i => $item) {
 				list($name, $file, $message) = $item;
 				$this->out("\n" . ($i + 1) . ") $name\n   $message\n   $file\n");
+				$this->diffLog($i + 1, $file);
 			}
 			$this->out("\nFAILURES! ($count tests, $failedCount failures, $skippedCount skipped)\n");
 			return FALSE;
@@ -146,6 +150,10 @@ class TestRunner
 					$args->next();
 					$this->logFile = fopen($args->current(), 'w');
 					break;
+				case 'dlog':
+					$args->next();
+					$this->diffLogFile = fopen($args->current(), 'w');
+					break;
 				case 'c':
 				case 'd':
 					$args->next();
@@ -176,6 +184,28 @@ class TestRunner
 		echo $s;
 		if ($this->logFile) {
 			fputs($this->logFile, $s);
+		}
+	}
+
+
+
+	/**
+	 * Writes machine-parsable info about tests into log
+	 * @return void
+	 */
+	private function diffLog($n, $f)
+	{
+		if ($this->diffLogFile) {
+			$o = $f;
+			if ($a = strrpos($o, '.')) {
+				$o = substr($o, 0, $a);
+			}
+			if (($a = strrpos($o, '/')) !== FALSE) {
+				$o = substr($o, 0 , $a) . '/output/' . substr($o, $a + 1);
+			} else {
+				$o = 'output/' . $o;
+			}
+			fputs($this->diffLogFile, "$n $f $o.actual $o.expected\n");
 		}
 	}
 
